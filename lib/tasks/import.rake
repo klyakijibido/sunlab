@@ -2,19 +2,22 @@ namespace :import do
   desc "Import from ods"
   task from_ods: :environment do
     # xlsx = Roo::Excelx.new("./users.ods")
-    ods = Roo::OpenOffice.new (Rails.root.join("db", "txt", "users.ods"))
+    ods = Roo::OpenOffice.new (Rails.root.join("db", "xls", "1570-0504.ods"))
 
-    ods.each(user_id: 'id', name: 'name', family_name: 'family', user_type: 'user_type') do |user_hash|
-      if user_hash[:family_name] != 'family'
+    ods.each(name: 'Наименование', artic: 'Артикул', razd: 'Разделка', price: 'Цена магазина', code: 'код') do |hash|
+      if hash[:family_name] != 'family'
         # делаем или ищем тип
-        user_type = UserType.create_or_find_by!(name: user_hash[:user_type])
+        # user_type = UserType.create_or_find_by!(name: hash[:user_type])
 
-        User.where(id: user_hash[:user_id]).first_or_initialize.tap do |user|
-          # это user.user_type.id = user_type.id
-          user.user_type = user_type
-          user.family_name = user_hash[:family_name] unless user_hash[:family_name].nil?
-          user.name = user_hash[:name] unless user_hash[:name].nil?
-          user.save!
+        Tovar.where(code: hash[:code]).first_or_initialize.tap do |tovar|
+          # это tovar.user_type.id = user_type.id
+          # tovar.user_type = user_type
+          tovar.name = hash[:name]
+          tovar.artic = hash[:artic] unless hash[:artic].nil?
+          tovar.razd = hash[:razd] unless hash[:razd].nil?
+          tovar.price = hash[:price]
+          tovar.code = hash[:code]
+          tovar.save!
         end
       end
     rescue ActiveRecord::RecordInvalid => error
