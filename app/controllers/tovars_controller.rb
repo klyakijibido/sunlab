@@ -7,6 +7,7 @@ class TovarsController < ApplicationController
 
   # GET /garments
   def index
+    @tovars = Tovar.all
   end
 
   # GET /garments/current
