@@ -3,6 +3,12 @@
     <h5 class="card-title"><%= tovar.name %></h5>
     <p class="card-text"><%= tovar.artic %></p>
     <p class="card-text"><%= tovar.razd %></p>
-    <a href="#" class="btn btn-primary">test</a>
-  </div>
+    <p class="card-text"><%= "код: #{tovar.code}" %></p>
+
+    <% if params[:action] == 'index' %>
+      <p><%= link_to "подробно", "/tovars/#{tovar.id}" %></p>
+    <% else %>
+      <p><%= link_to "назад", "/tovars/" %></p>
+    <% end %>
+    </div>
 </div>
